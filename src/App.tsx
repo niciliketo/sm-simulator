@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useSimulation } from './hooks/useSimulation';
 import { NetworkGraph } from './components/NetworkGraph';
 import { HappinessChart } from './components/HappinessChart';
+import { TheorySection } from './components/TheorySection';
 import { Play, Pause, RefreshCw, Activity, Settings2 } from 'lucide-react';
 
 function App() {
@@ -152,6 +153,8 @@ function App() {
           </div>
         </aside>
       </main>
+
+      <TheorySection />
     </div>
   );
 }

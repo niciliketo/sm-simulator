@@ -36,7 +36,7 @@ A client-side agent-based simulation to visualize how social media algorithms an
 - [x] Real-time stats charts (Avg Happiness, Post Sentiment)
 - [x] Main layout structure
 
-### Phase 5: Polish & Documentation [ ]
-- [ ] Add explanatory text/tutorial
-- [ ] Code comments review
-- [ ] Final QA
+### Phase 5: Polish & Documentation [x]
+- [x] Add explanatory text/tutorial
+- [x] Code comments review
+- [x] Final QA

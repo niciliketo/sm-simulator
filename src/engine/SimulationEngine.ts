@@ -71,20 +71,21 @@ export class SimulationEngine {
       const feed = this.getFeedForAgent(agent);
       if (feed.length === 0) return;
 
-      // Calculate mood shift based on feed
+      // Calculate mood shift based on feed.
+      // This is the core mechanism of emotional contagion.
       let moodDelta = 0;
       feed.forEach((post) => {
-        // Algorithm Bias logic:
-        // If algorithmBias is high, negative posts have a stronger impact because they "engage" more
-        // OR the algorithm shows them more negative posts (handled in getFeedForAgent)
+        // The impact of a post depends on the agent's susceptibility.
+        // (post.sentiment - 0.5) ranges from -0.5 (negative) to 0.5 (positive).
         const impact = (post.sentiment - 0.5) * agent.susceptibility;
         moodDelta += impact;
       });
 
-      // Update happiness
+      // Update happiness: The average sentiment of the feed shifts the current mood.
       agent.happiness = this.clamp(agent.happiness + moodDelta / feed.length);
       
-      // Natural decay towards neutral (0.5)
+      // Natural decay: Over time, moods tend to drift back toward neutral (0.5).
+      // This prevents the simulation from staying permanently at 0 or 1 without active stimulus.
       agent.happiness += (0.5 - agent.happiness) * 0.05;
     });
 
@@ -101,21 +102,22 @@ export class SimulationEngine {
   }
 
   private getFeedForAgent(agent: Agent): Post[] {
-    // Get posts from people they follow
+    // Filter posts to only show content from agents this user follows.
     const followedPosts = this.posts.filter((p) => agent.following.includes(p.authorId));
     
     if (this.config.algorithmBias === 0) {
-      // Purely chronological (last 5)
+      // Purely chronological feed: show the most recent 5 posts.
       return followedPosts.slice(-5);
     }
 
-    // Algorithm favors "extreme" content (low sentiment or high sentiment, but mostly low for this sim's purpose)
-    // We'll sort by how far sentiment is from neutral (engagement proxy)
+    // Algorithmic Feed: favors "extreme" content (engagement proxy).
+    // We sort posts by their absolute distance from neutral (0.5).
+    // The algorithmBias determines how strongly this sorting influences the feed.
     return followedPosts
       .sort((a, b) => {
         const scoreA = Math.abs(a.sentiment - 0.5);
         const scoreB = Math.abs(b.sentiment - 0.5);
-        // Blend between chronological and engagement
+        // If bias is high, high-arousal content (extremes) moves to the top.
         return (scoreB - scoreA) * this.config.algorithmBias;
       })
       .slice(-5);
