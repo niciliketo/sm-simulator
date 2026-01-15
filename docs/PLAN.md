@@ -31,10 +31,10 @@ A client-side agent-based simulation to visualize how social media algorithms an
 - [x] Map relationships to links
 - [ ] **Tests:** Component render tests
 
-### Phase 4: UI & Controls [ ]
-- [ ] Sidebar for simulation parameters (Bias, Speed, Population)
-- [ ] Real-time stats charts (Avg Happiness, Post Sentiment)
-- [ ] Main layout structure
+### Phase 4: UI & Controls [x]
+- [x] Sidebar for simulation parameters (Bias, Speed, Population)
+- [x] Real-time stats charts (Avg Happiness, Post Sentiment)
+- [x] Main layout structure
 
 ### Phase 5: Polish & Documentation [ ]
 - [ ] Add explanatory text/tutorial
