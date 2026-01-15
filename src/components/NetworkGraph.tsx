@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import type { Agent } from '../engine/types';
 
@@ -7,6 +7,8 @@ interface NetworkGraphProps {
 }
 
 export const NetworkGraph: React.FC<NetworkGraphProps> = ({ agents }) => {
+  const graphRef = useRef<any>();
+
   const graphData = useMemo(() => {
     const nodes = agents.map((agent) => ({
       id: agent.id,
@@ -31,12 +33,16 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({ agents }) => {
   return (
     <div className="w-full h-full bg-slate-900 border border-slate-700 rounded-lg overflow-hidden">
       <ForceGraph2D
+        ref={graphRef}
         graphData={graphData}
         nodeLabel={(node: any) => `${node.name} (Happiness: ${node.happiness.toFixed(2)})`}
         nodeColor={(node: any) => node.color}
         linkColor={() => 'rgba(255, 255, 255, 0.1)'}
         nodeRelSize={6}
         backgroundColor="#0f172a"
+        warmupTicks={100}
+        cooldownTicks={0}
+        enableNodeDrag={false}
       />
     </div>
   );
