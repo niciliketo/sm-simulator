@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
-import { Agent } from '../engine/types';
+import type { Agent } from '../engine/types';
 
 interface NetworkGraphProps {
   agents: Agent[];

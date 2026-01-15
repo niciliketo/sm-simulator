@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { SimulationEngine } from '../engine/SimulationEngine';
-import { Agent, SimulationConfig } from '../engine/types';
+import type { Agent, SimulationConfig } from '../engine/types';
 
 export const useSimulation = (initialConfig: SimulationConfig) => {
   const engineRef = useRef<SimulationEngine>(new SimulationEngine(initialConfig));

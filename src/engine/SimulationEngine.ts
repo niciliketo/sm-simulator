@@ -1,4 +1,4 @@
-import { Agent, Post, SimulationConfig } from './types';
+import type { Agent, Post, SimulationConfig } from './types';
 
 export class SimulationEngine {
   private agents: Map<string, Agent> = new Map();

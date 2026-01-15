@@ -1,5 +1,5 @@
 import React from 'react';
-import { Info, Brain, Zap, Share2 } from 'lucide-react';
+import { Brain, Zap, Share2 } from 'lucide-react';
 
 export const TheorySection: React.FC = () => {
   return (

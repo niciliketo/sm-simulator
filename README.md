@@ -1,73 +1,125 @@
-# React + TypeScript + Vite
+# Social Media Simulator
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive web-based simulation exploring how emotional contagion, network effects, and content recommendation algorithms shape online discourse. Watch in real-time as sentiment spreads through a network of agents, influenced by algorithmic bias and social connections.
 
-Currently, two official plugins are available:
+## What It Simulates
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project models a simplified social media platform where:
 
-## React Compiler
+- **Agents** represent users with varying emotional states (happiness) and susceptibility to influence
+- **Posts** carry sentiment that reflects the author's current mood
+- **Networks** connect agents through follower/following relationships
+- **Algorithms** control how content is surfaced to users (chronological vs. engagement-driven)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Key Mechanisms
 
-## Expanding the ESLint configuration
+1. **Emotional Contagion**: Agents' moods shift based on the sentiment of content they consume. Negative content can cascade through networks, pulling down collective happiness.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+2. **Algorithmic Amplification**: The algorithm bias parameter controls whether feeds show chronological content (bias = 0) or prioritize emotionally extreme posts (bias = 1), mimicking engagement-maximizing algorithms.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+3. **Feedback Loops**: Unhappy agents are more likely to post, and they tend to post negative content. When algorithms amplify this negativity, it creates self-reinforcing cycles.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Features
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Real-time network graph visualization with color-coded happiness levels
+- Interactive charts tracking average happiness and post volume over time
+- Adjustable simulation parameters:
+  - Algorithm bias (chronological vs. engagement-driven)
+  - Post rate multiplier
+  - Agent susceptibility
+  - Network size and connectivity
+- Step-through or continuous simulation modes
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+ and npm
+
+### Installation
+
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+Open your browser to the URL shown (typically `http://localhost:5173`)
+
+### Build
+
+```bash
+npm run build
+```
+
+### Test
+
+```bash
+npm run test
+```
+
+## How to Use
+
+1. **Initialize**: Set your desired number of agents and average connections per agent, then click "Initialize Network"
+2. **Adjust Parameters**: Use the sliders to configure algorithm bias and post rate
+3. **Run Simulation**: Click "Start" to run continuously or "Step" to advance one tick at a time
+4. **Observe**: Watch the network graph change colors (green = happy, red = unhappy) and track metrics in the charts
+
+## Technical Stack
+
+- **React 19** with TypeScript
+- **Vite 7** for build tooling and dev server
+- **Tailwind CSS 4** for styling
+- **Recharts** for data visualization
+- **react-force-graph-2d** for network graph rendering
+- **Vitest** for testing
+
+## Project Structure
+
+```
+src/
+├── components/
+│   ├── NetworkGraph.tsx      # Interactive force-directed graph visualization
+│   └── TheorySection.tsx     # Explanation of simulation mechanics
+├── engine/
+│   ├── SimulationEngine.ts   # Core simulation logic
+│   └── types.ts              # TypeScript interfaces
+├── hooks/
+│   └── useSimulation.ts      # React hook for simulation state
+└── App.tsx                   # Main application component
+```
+
+## Simulation Details
+
+### Agent Behavior
+
+- Each agent has a **happiness** score (0-1) that evolves based on consumed content
+- **Susceptibility** (0-1) determines how strongly agents are affected by posts
+- **Post frequency** varies by agent, modified by emotional arousal
+- Moods naturally decay toward neutral (0.5) over time
+
+### Feed Algorithm
+
+When `algorithmBias = 0`:
+- Feeds show the 5 most recent posts from followed agents (chronological)
+
+When `algorithmBias > 0`:
+- Feeds prioritize posts with extreme sentiment (far from 0.5)
+- Higher bias means stronger prioritization of emotionally charged content
+
+### Metrics
+
+- **Average Happiness**: Mean happiness across all agents (0-1)
+- **Posts/Tick**: Number of new posts created each simulation step
+
+## License
+
+MIT
+
+## Acknowledgments
+
+Inspired by research on emotional contagion in social networks, filter bubbles, and the effects of engagement-driven content recommendation algorithms.

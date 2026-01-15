@@ -20,7 +20,7 @@ describe('SimulationEngine', () => {
 
   it('should update average happiness after a step', () => {
     engine.initialize(20, 3);
-    const initialHappiness = engine.step().averageHappiness;
+    engine.step();
     
     // Run multiple steps
     for (let i = 0; i < 10; i++) {
