@@ -18,12 +18,12 @@ A client-side agent-based simulation to visualize how social media algorithms an
 - [x] Configure Tailwind CSS
 - [x] Configure Test Environment
 
-### Phase 2: Simulation Engine (Core Logic) [ ]
-- [ ] Define `Agent` model (happiness, susceptibility, connectivity)
-- [ ] Define `Post` model (sentiment, author)
-- [ ] Create `SimulationEngine` class (tick loop, interaction rules)
-- [ ] Implement "Algorithm Bias" logic
-- [ ] **Tests:** Unit tests for Agent state changes and Engine steps
+### Phase 2: Simulation Engine (Core Logic) [x]
+- [x] Define `Agent` model (happiness, susceptibility, connectivity)
+- [x] Define `Post` model (sentiment, author)
+- [x] Create `SimulationEngine` class (tick loop, interaction rules)
+- [x] Implement "Algorithm Bias" logic
+- [x] **Tests:** Unit tests for Agent state changes and Engine steps
 
 ### Phase 3: Visualization (The Graph) [ ]
 - [ ] Integrate `react-force-graph-2d`
