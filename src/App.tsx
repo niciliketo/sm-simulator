@@ -114,8 +114,8 @@ function App() {
                   onChange={(e) => updateConfig({ algorithmBias: parseFloat(e.target.value) })}
                 />
                 <div className="flex justify-between text-[10px] text-slate-500 font-medium uppercase">
-                  <span>Neutral</span>
                   <span>Extreme Content</span>
+                  <span>Neutral</span>
                 </div>
                 <p className="text-xs text-slate-500 leading-relaxed mt-1">
                   Controls how much the feed prioritizes emotional/extreme content over chronological posts.
@@ -135,8 +135,8 @@ function App() {
                   onChange={(e) => setTickRate(parseInt(e.target.value))}
                 />
                 <div className="flex justify-between text-[10px] text-slate-500 font-medium uppercase">
-                  <span>Fast</span>
                   <span>Slow</span>
+                  <span>Fast</span>
                 </div>
               </div>
 
