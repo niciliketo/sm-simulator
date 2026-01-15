@@ -25,10 +25,10 @@ A client-side agent-based simulation to visualize how social media algorithms an
 - [x] Implement "Algorithm Bias" logic
 - [x] **Tests:** Unit tests for Agent state changes and Engine steps
 
-### Phase 3: Visualization (The Graph) [ ]
-- [ ] Integrate `react-force-graph-2d`
-- [ ] Map agents to nodes (color = mood)
-- [ ] Map relationships to links
+### Phase 3: Visualization (The Graph) [x]
+- [x] Integrate `react-force-graph-2d`
+- [x] Map agents to nodes (color = mood)
+- [x] Map relationships to links
 - [ ] **Tests:** Component render tests
 
 ### Phase 4: UI & Controls [ ]
