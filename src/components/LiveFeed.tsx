@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Post } from '../engine/types';
 import { MessageSquare } from 'lucide-react';
+import { generateContent, generatePersonName } from '../utils/contentGenerator';
 
 interface LiveFeedProps {
   posts: Post[];
@@ -16,7 +17,7 @@ export const LiveFeed: React.FC<LiveFeedProps> = ({ posts }) => {
         <MessageSquare size={16} /> Live Feed
       </div>
 
-      <div className="flex-1 overflow-y-auto space-y-2 pr-2">
+      <div className="flex-1 overflow-y-auto space-y-3 pr-2">
         {recentPosts.length === 0 ? (
           <div className="text-slate-500 text-sm text-center py-8">
             No posts yet. Start the simulation to see activity.
@@ -28,17 +29,21 @@ export const LiveFeed: React.FC<LiveFeedProps> = ({ posts }) => {
               className="bg-slate-800/50 border border-slate-700 rounded-lg p-3 space-y-2 hover:bg-slate-800 transition-colors"
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono text-slate-400">
-                  {post.authorId.replace('agent-', 'Agent ')}
+                <span className="text-sm font-semibold text-slate-300">
+                  {generatePersonName(post.authorId)}
                 </span>
                 <span className="text-xs text-slate-500">
                   Tick {post.timestamp}
                 </span>
               </div>
 
-              <div className="flex items-center gap-3">
+              <p className="text-sm text-slate-300 leading-relaxed">
+                {generateContent(post.sentiment)}
+              </p>
+
+              <div className="flex items-center gap-3 pt-1">
                 <div className="flex-1">
-                  <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
                     <div
                       className="h-full transition-all"
                       style={{

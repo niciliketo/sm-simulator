@@ -1,23 +1,23 @@
 # Social Media Simulator
 
-An interactive web-based simulation exploring how emotional contagion, network effects, and content recommendation algorithms shape online discourse. Watch in real-time as sentiment spreads through a network of agents, influenced by algorithmic bias and social connections.
+An interactive web-based simulation exploring how emotional contagion, network effects, and content recommendation algorithms shape online discourse. Watch in real-time as sentiment spreads through a network of people, influenced by algorithmic bias and social connections.
 
 ## What It Simulates
 
 This project models a simplified social media platform where:
 
-- **Agents** represent users with varying emotional states (happiness) and susceptibility to influence
+- **People** represent users with varying emotional states (happiness) and susceptibility to influence
 - **Posts** carry sentiment that reflects the author's current mood
-- **Networks** connect agents through follower/following relationships
+- **Networks** connect people through follower/following relationships
 - **Algorithms** control how content is surfaced to users (chronological vs. engagement-driven)
 
 ### Key Mechanisms
 
-1. **Emotional Contagion**: Agents' moods shift based on the sentiment of content they consume. Negative content can cascade through networks, pulling down collective happiness.
+1. **Emotional Contagion**: People's moods shift based on the sentiment of content they consume. Negative content can cascade through networks, pulling down collective happiness.
 
 2. **Algorithmic Amplification**: The algorithm bias parameter controls whether feeds show chronological content (bias = 0) or prioritize emotionally extreme posts (bias = 1), mimicking engagement-maximizing algorithms.
 
-3. **Feedback Loops**: Unhappy agents are more likely to post, and they tend to post negative content. When algorithms amplify this negativity, it creates self-reinforcing cycles.
+3. **Feedback Loops**: Unhappy people are more likely to post, and they tend to post negative content. When algorithms amplify this negativity, it creates self-reinforcing cycles.
 
 ## Features
 
@@ -26,7 +26,7 @@ This project models a simplified social media platform where:
 - Adjustable simulation parameters:
   - Algorithm bias (chronological vs. engagement-driven)
   - Post rate multiplier
-  - Agent susceptibility
+  - Individual susceptibility
   - Network size and connectivity
 - Step-through or continuous simulation modes
 
@@ -64,7 +64,7 @@ npx vitest run
 
 ## How to Use
 
-1. **Initialize**: Set your desired number of agents and average connections per agent, then click "Initialize Network"
+1. **Initialize**: Set your desired number of people and average connections per person, then click "Initialize Network"
 2. **Adjust Parameters**: Use the sliders to configure algorithm bias and post rate
 3. **Run Simulation**: Click "Start" to run continuously or "Step" to advance one tick at a time
 4. **Observe**: Watch the network graph change colors (green = happy, red = unhappy) and track metrics in the charts
@@ -95,17 +95,17 @@ src/
 
 ## Simulation Details
 
-### Agent Behavior
+### Individual Behavior
 
-- Each agent has a **happiness** score (0-1) that evolves based on consumed content
-- **Susceptibility** (0-1) determines how strongly agents are affected by posts
-- **Post frequency** varies by agent, modified by emotional arousal
+- Each person has a **happiness** score (0-1) that evolves based on consumed content
+- **Susceptibility** (0-1) determines how strongly people are affected by posts
+- **Post frequency** varies by individual, modified by emotional arousal
 - Moods naturally decay toward neutral (0.5) over time
 
 ### Feed Algorithm
 
 When `algorithmBias = 0`:
-- Feeds show the 5 most recent posts from followed agents (chronological)
+- Feeds show the 5 most recent posts from followed people (chronological)
 
 When `algorithmBias > 0`:
 - Feeds prioritize posts with extreme sentiment (far from 0.5)
@@ -113,7 +113,7 @@ When `algorithmBias > 0`:
 
 ### Metrics
 
-- **Average Happiness**: Mean happiness across all agents (0-1)
+- **Average Happiness**: Mean happiness across all people (0-1)
 - **Posts/Tick**: Number of new posts created each simulation step
 
 ## License

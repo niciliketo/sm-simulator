@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import type { Agent, Post } from '../engine/types';
+import { generatePersonName } from '../utils/contentGenerator';
 
 interface NetworkGraphProps {
   agents: Agent[];
@@ -46,7 +47,7 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({ agents, recentPosts 
   const graphData = useMemo(() => {
     const nodes = agents.map((agent) => ({
       id: agent.id,
-      name: `Agent ${agent.id.split('-')[1]}`,
+      name: generatePersonName(agent.id),
       happiness: agent.happiness,
       color: getHappinessColor(agent.happiness),
     }));

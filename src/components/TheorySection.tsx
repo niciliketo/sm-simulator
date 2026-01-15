@@ -10,8 +10,8 @@ export const TheorySection: React.FC = () => {
           <h3 className="font-bold uppercase tracking-wider text-sm">Emotional Contagion</h3>
         </div>
         <p className="text-sm text-slate-400 leading-relaxed">
-          Agents in this simulation have a "Happiness" score. When they consume content from their feed, 
-          their mood shifts based on the sentiment of the posts they see. Negative content tends to 
+          People in this simulation have a "Happiness" score. When they consume content from their feed,
+          their mood shifts based on the sentiment of the posts they see. Negative content tends to
           spread faster as it lowers the happiness of others, making them more likely to post negative content themselves.
         </p>
       </div>
@@ -34,8 +34,8 @@ export const TheorySection: React.FC = () => {
           <h3 className="font-bold uppercase tracking-wider text-sm">Feedback Loops</h3>
         </div>
         <p className="text-sm text-slate-400 leading-relaxed">
-          Watch how local clusters of negativity (red nodes) can infect the entire network. 
-          High susceptibility means agents are easily influenced by their peers, while low susceptibility 
+          Watch how local clusters of negativity (red nodes) can infect the entire network.
+          High susceptibility means people are easily influenced by their peers, while low susceptibility
           acts as a buffer against viral negativity.
         </p>
       </div>
