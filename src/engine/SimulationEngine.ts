@@ -97,6 +97,7 @@ export class SimulationEngine {
     return {
       tick: this.tickCount,
       newPostsCount: newPosts.length,
+      newPosts: newPosts,
       averageHappiness: this.getAverageHappiness(),
     };
   }

@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { SimulationEngine } from '../engine/SimulationEngine';
-import type { Agent, SimulationConfig } from '../engine/types';
+import type { Agent, SimulationConfig, Post } from '../engine/types';
 
 export const useSimulation = (initialConfig: SimulationConfig) => {
   const engineRef = useRef<SimulationEngine>(new SimulationEngine(initialConfig));
   const [agents, setAgents] = useState<Agent[]>([]);
   const [stats, setStats] = useState<{ tick: number; averageHappiness: number }[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [isRunning, setIsRunning] = useState(false);
   const [tickRate, setTickRate] = useState(500); // ms per tick
 
@@ -13,12 +14,14 @@ export const useSimulation = (initialConfig: SimulationConfig) => {
     engineRef.current.initialize(agentCount, connections);
     setAgents([...engineRef.current.getAgents()]);
     setStats([{ tick: 0, averageHappiness: 0.5 }]);
+    setPosts([]);
   }, []);
 
   const step = useCallback(() => {
     const result = engineRef.current.step();
     setAgents([...engineRef.current.getAgents()]);
     setStats((prev) => [...prev, { tick: result.tick, averageHappiness: result.averageHappiness }].slice(-50));
+    setPosts((prev) => [...prev, ...result.newPosts].slice(-100)); // Keep last 100 posts
     return result;
   }, []);
 
@@ -39,6 +42,7 @@ export const useSimulation = (initialConfig: SimulationConfig) => {
   return {
     agents,
     stats,
+    posts,
     isRunning,
     setIsRunning,
     initialize,

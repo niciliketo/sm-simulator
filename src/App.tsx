@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useSimulation } from './hooks/useSimulation';
 import { NetworkGraph } from './components/NetworkGraph';
 import { HappinessChart } from './components/HappinessChart';
+import { LiveFeed } from './components/LiveFeed';
 import { TheorySection } from './components/TheorySection';
 import { Play, Pause, RefreshCw, Activity, Settings2 } from 'lucide-react';
 
@@ -9,6 +10,7 @@ function App() {
   const {
     agents,
     stats,
+    posts,
     isRunning,
     setIsRunning,
     initialize,
@@ -63,14 +65,19 @@ function App() {
 
       <main className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-140px)] min-h-[600px]">
         {/* Main Graph Area */}
-        <div className="lg:col-span-9 bg-slate-900/50 border border-slate-800 rounded-xl overflow-hidden relative shadow-2xl">
+        <div className="lg:col-span-7 bg-slate-900/50 border border-slate-800 rounded-xl overflow-hidden relative shadow-2xl">
           <div className="absolute top-4 left-4 z-10 bg-slate-950/80 backdrop-blur px-3 py-1.5 rounded border border-slate-800 flex items-center gap-2 text-xs font-mono text-slate-400">
             <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Happy
             <span className="w-2 h-2 rounded-full bg-red-500 ml-2"></span> Unhappy
           </div>
-          <NetworkGraph agents={agents} />
+          <NetworkGraph agents={agents} recentPosts={posts.slice(-10)} />
         </div>
-        
+
+        {/* Live Feed */}
+        <div className="lg:col-span-2 flex flex-col gap-6 overflow-hidden">
+          <LiveFeed posts={posts} />
+        </div>
+
         {/* Sidebar Controls */}
         <aside className="lg:col-span-3 flex flex-col gap-6 overflow-y-auto pr-2">
           
