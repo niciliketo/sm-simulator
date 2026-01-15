@@ -59,7 +59,7 @@ npm run build
 ### Test
 
 ```bash
-npm run test
+npx vitest run
 ```
 
 ## How to Use
