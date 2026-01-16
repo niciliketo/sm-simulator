@@ -62,6 +62,57 @@ npm run build
 npx vitest run
 ```
 
+## Deployment
+
+This project is configured for deployment to a Hetzner server using [Kamal 2](https://kamal-deploy.org/).
+
+### Prerequisites
+
+- [Kamal 2](https://kamal-deploy.org/) installed (`gem install kamal`)
+- A GitHub Personal Access Token with `read:packages` and `write:packages` scopes
+- Access to the deployment server (SSH key configured)
+
+### Setup
+
+1. **Set up secrets**:
+   ```bash
+   # Copy the secrets template
+   cp .kamal/secrets-example .kamal/secrets
+
+   # Set your GitHub token in your environment
+   export GITHUB_TOKEN=your_github_token_here
+   ```
+
+2. **Initial deployment**:
+   ```bash
+   # This sets up the server, proxy, and deploys the app
+   kamal setup
+   ```
+
+3. **Subsequent deployments**:
+   ```bash
+   # Deploy updates
+   kamal deploy
+   ```
+
+### Useful Commands
+
+```bash
+# View application logs
+kamal logs
+
+# Access container shell
+kamal shell
+
+# Rollback to previous version
+kamal rollback
+
+# Check deployment status
+kamal details
+```
+
+The application will be available at: https://sm.iliketo.net
+
 ## How to Use
 
 1. **Initialize**: Set your desired number of people and average connections per person, then click "Initialize Network"

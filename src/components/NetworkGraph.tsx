@@ -9,7 +9,7 @@ interface NetworkGraphProps {
 }
 
 export const NetworkGraph: React.FC<NetworkGraphProps> = ({ agents, recentPosts = [] }) => {
-  const graphRef = useRef<any>();
+  const graphRef = useRef<any>(null);
   const [pulsingEdges, setPulsingEdges] = useState<Map<string, { color: string; timestamp: number }>>(new Map());
 
   // Track posts and create edge pulses

@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Load environment variables from .env and run kamal
+
+# Add gem binaries to PATH
+export PATH="$HOME/.local/share/gem/ruby/3.4.0/bin:$PATH"
+
+# Load .env if it exists
+if [ -f .env ]; then
+  export $(grep -v '^#' .env | xargs)
+fi
+
+# Run kamal with all passed arguments
+exec kamal "$@"
