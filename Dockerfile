@@ -27,6 +27,9 @@ FROM nginx:alpine
 # Copy built files from build stage
 COPY --from=build /app/dist /usr/share/nginx/html
 
+# Create health check endpoint for Kamal
+RUN echo "ok" > /usr/share/nginx/html/up
+
 # Copy nginx configuration if needed (using default for now)
 # COPY nginx.conf /etc/nginx/nginx.conf
 
