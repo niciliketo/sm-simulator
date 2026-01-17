@@ -3,7 +3,7 @@ import { generateContent, generatePersonName } from './contentGenerator';
 
 describe('generateContent', () => {
   it('should generate content for very negative sentiment (0-0.2)', () => {
-    const content = generateContent(0.1);
+    const content = generateContent(0.1, 'post-1');
     expect(content).toBeTruthy();
     expect(typeof content).toBe('string');
     expect(content.length).toBeGreaterThan(0);
@@ -20,14 +20,14 @@ describe('generateContent', () => {
   });
 
   it('should generate content for negative sentiment (0.2-0.4)', () => {
-    const content = generateContent(0.3);
+    const content = generateContent(0.3, 'post-2');
     expect(content).toBeTruthy();
     expect(typeof content).toBe('string');
     expect(content.length).toBeGreaterThan(0);
   });
 
   it('should generate content for neutral sentiment (0.4-0.6)', () => {
-    const content = generateContent(0.5);
+    const content = generateContent(0.5, 'post-3');
     expect(content).toBeTruthy();
     expect(typeof content).toBe('string');
     expect(content.length).toBeGreaterThan(0);
@@ -44,14 +44,14 @@ describe('generateContent', () => {
   });
 
   it('should generate content for positive sentiment (0.6-0.8)', () => {
-    const content = generateContent(0.7);
+    const content = generateContent(0.7, 'post-4');
     expect(content).toBeTruthy();
     expect(typeof content).toBe('string');
     expect(content.length).toBeGreaterThan(0);
   });
 
   it('should generate content for very positive sentiment (0.8-1.0)', () => {
-    const content = generateContent(0.9);
+    const content = generateContent(0.9, 'post-5');
     expect(content).toBeTruthy();
     expect(typeof content).toBe('string');
     expect(content.length).toBeGreaterThan(0);
@@ -68,9 +68,25 @@ describe('generateContent', () => {
   });
 
   it('should handle edge case sentiment values', () => {
-    expect(generateContent(0)).toBeTruthy();
-    expect(generateContent(0.5)).toBeTruthy();
-    expect(generateContent(1)).toBeTruthy();
+    expect(generateContent(0, 'post-6')).toBeTruthy();
+    expect(generateContent(0.5, 'post-7')).toBeTruthy();
+    expect(generateContent(1, 'post-8')).toBeTruthy();
+  });
+
+  it('should generate consistent content for the same post ID', () => {
+    const content1 = generateContent(0.5, 'post-123');
+    const content2 = generateContent(0.5, 'post-123');
+    expect(content1).toBe(content2);
+  });
+
+  it('should generate different content for different post IDs', () => {
+    const content1 = generateContent(0.5, 'post-1');
+    const content2 = generateContent(0.5, 'post-2');
+    const content3 = generateContent(0.5, 'post-3');
+
+    // Not all will be different (only 8 options), but we should see variety
+    const uniqueContents = new Set([content1, content2, content3]);
+    expect(uniqueContents.size).toBeGreaterThanOrEqual(1);
   });
 });
 

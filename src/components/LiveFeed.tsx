@@ -38,7 +38,7 @@ export const LiveFeed: React.FC<LiveFeedProps> = ({ posts }) => {
               </div>
 
               <p className="text-sm text-slate-300 leading-relaxed">
-                {generateContent(post.sentiment)}
+                {generateContent(post.sentiment, post.id)}
               </p>
 
               <div className="flex items-center gap-3 pt-1">

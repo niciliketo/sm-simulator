@@ -39,6 +39,35 @@ export const useSimulation = (initialConfig: SimulationConfig) => {
     engineRef.current.setConfig(config);
   };
 
+  const getAgent = useCallback((agentId: string) => {
+    return engineRef.current.getAgent(agentId);
+  }, []);
+
+  const getAgentFeed = useCallback((agentId: string) => {
+    return engineRef.current.getFeedForAgent(agentId);
+  }, []);
+
+  const getAgentPosts = useCallback((agentId: string) => {
+    return engineRef.current.getAgentPosts(agentId);
+  }, []);
+
+  const setAgentHappiness = useCallback((agentId: string, happiness: number) => {
+    const success = engineRef.current.setAgentHappiness(agentId, happiness);
+    if (success) {
+      setAgents([...engineRef.current.getAgents()]);
+    }
+    return success;
+  }, []);
+
+  const injectPost = useCallback((agentId: string, sentiment: number) => {
+    const post = engineRef.current.injectPost(agentId, sentiment);
+    if (post) {
+      setPosts((prev) => [...prev, post].slice(-100));
+      setAgents([...engineRef.current.getAgents()]);
+    }
+    return post;
+  }, []);
+
   return {
     agents,
     stats,
@@ -49,5 +78,10 @@ export const useSimulation = (initialConfig: SimulationConfig) => {
     step,
     updateConfig,
     setTickRate,
+    getAgent,
+    getAgentFeed,
+    getAgentPosts,
+    setAgentHappiness,
+    injectPost,
   };
 };

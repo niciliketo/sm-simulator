@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState, useEffect } from 'react';
+import React, { useMemo, useRef, useState, useEffect, useCallback } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 import type { Agent, Post } from '../engine/types';
 import { generatePersonName } from '../utils/contentGenerator';
@@ -6,9 +6,16 @@ import { generatePersonName } from '../utils/contentGenerator';
 interface NetworkGraphProps {
   agents: Agent[];
   recentPosts?: Post[];
+  selectedAgentId?: string | null;
+  onNodeClick?: (agentId: string) => void;
 }
 
-export const NetworkGraph: React.FC<NetworkGraphProps> = ({ agents, recentPosts = [] }) => {
+export const NetworkGraph: React.FC<NetworkGraphProps> = ({
+  agents,
+  recentPosts = [],
+  selectedAgentId = null,
+  onNodeClick,
+}) => {
   const graphRef = useRef<any>(null);
   const [pulsingEdges, setPulsingEdges] = useState<Map<string, { color: string; timestamp: number }>>(new Map());
 
@@ -78,13 +85,40 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({ agents, recentPosts 
     return 'rgba(255, 255, 255, 0.1)';
   };
 
+  const getNodeCanvasObject = useCallback((node: any, ctx: any, globalScale: number) => {
+    const label = node.name;
+    const fontSize = 12 / globalScale;
+    const isSelected = node.id === selectedAgentId;
+
+    // Draw node circle
+    ctx.beginPath();
+    ctx.arc(node.x, node.y, isSelected ? 8 : 6, 0, 2 * Math.PI);
+    ctx.fillStyle = node.color;
+    ctx.fill();
+
+    if (isSelected) {
+      ctx.strokeStyle = '#60a5fa'; // blue-400
+      ctx.lineWidth = 2 / globalScale;
+      ctx.stroke();
+    }
+
+    // Draw label for selected node
+    if (isSelected) {
+      ctx.font = `${fontSize}px Sans-Serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillStyle = '#e2e8f0'; // slate-200
+      ctx.fillText(label, node.x, node.y + 10);
+    }
+  }, [selectedAgentId]);
+
   return (
     <div className="w-full h-full bg-slate-900 border border-slate-700 rounded-lg overflow-hidden">
       <ForceGraph2D
         ref={graphRef}
         graphData={graphData}
         nodeLabel={(node: any) => `${node.name} (Happiness: ${node.happiness.toFixed(2)})`}
-        nodeColor={(node: any) => node.color}
+        nodeCanvasObject={getNodeCanvasObject}
         linkColor={getLinkColor}
         linkWidth={2}
         nodeRelSize={6}
@@ -92,6 +126,7 @@ export const NetworkGraph: React.FC<NetworkGraphProps> = ({ agents, recentPosts 
         warmupTicks={100}
         cooldownTicks={0}
         enableNodeDrag={false}
+        onNodeClick={(node: any) => onNodeClick?.(node.id)}
       />
     </div>
   );

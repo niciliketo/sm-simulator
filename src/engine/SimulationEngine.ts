@@ -68,7 +68,7 @@ export class SimulationEngine {
 
     // 2. Agents Consume Feeds
     this.agents.forEach((agent) => {
-      const feed = this.getFeedForAgent(agent);
+      const feed = this.getFeedForAgent(agent.id);
       if (feed.length === 0) return;
 
       // Calculate mood shift based on feed.
@@ -102,10 +102,13 @@ export class SimulationEngine {
     };
   }
 
-  private getFeedForAgent(agent: Agent): Post[] {
+  public getFeedForAgent(agentId: string): Post[] {
+    const agent = this.agents.get(agentId);
+    if (!agent) return [];
+
     // Filter posts to only show content from agents this user follows.
     const followedPosts = this.posts.filter((p) => agent.following.includes(p.authorId));
-    
+
     if (this.config.algorithmBias === 0) {
       // Purely chronological feed: show the most recent 5 posts.
       return followedPosts.slice(-5);
@@ -140,5 +143,35 @@ export class SimulationEngine {
 
   public setConfig(config: Partial<SimulationConfig>) {
     this.config = { ...this.config, ...config };
+  }
+
+  public getAgent(agentId: string): Agent | undefined {
+    return this.agents.get(agentId);
+  }
+
+  public getAgentPosts(agentId: string): Post[] {
+    return this.posts.filter(p => p.authorId === agentId);
+  }
+
+  public setAgentHappiness(agentId: string, happiness: number): boolean {
+    const agent = this.agents.get(agentId);
+    if (!agent) return false;
+    agent.happiness = this.clamp(happiness);
+    return true;
+  }
+
+  public injectPost(agentId: string, sentiment: number): Post | null {
+    const agent = this.agents.get(agentId);
+    if (!agent) return null;
+
+    const post: Post = {
+      id: `post-${this.tickCount}-${agentId}-manual`,
+      authorId: agentId,
+      sentiment: this.clamp(sentiment),
+      timestamp: this.tickCount,
+    };
+
+    this.posts.push(post);
+    return post;
   }
 }

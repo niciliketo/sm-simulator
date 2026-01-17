@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSimulation } from './hooks/useSimulation';
 import { NetworkGraph } from './components/NetworkGraph';
 import { HappinessChart } from './components/HappinessChart';
 import { LiveFeed } from './components/LiveFeed';
+import { AgentDetailPanel } from './components/AgentDetailPanel';
 import { TheorySection } from './components/TheorySection';
 import { Play, Pause, RefreshCw, Activity, Settings2 } from 'lucide-react';
 
@@ -17,16 +18,33 @@ function App() {
     step,
     updateConfig,
     setTickRate,
+    getAgent,
+    getAgentFeed,
+    getAgentPosts,
+    setAgentHappiness,
+    injectPost,
   } = useSimulation({
     algorithmBias: 0.5,
     postRateMultiplier: 1.0,
   });
+
+  const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
 
   useEffect(() => {
     initialize(50, 3);
   }, [initialize]);
 
   const currentHappiness = stats[stats.length - 1]?.averageHappiness || 0;
+
+  const handleNodeClick = (agentId: string) => {
+    setSelectedAgentId(agentId);
+  };
+
+  const handleCloseAgentDetail = () => {
+    setSelectedAgentId(null);
+  };
+
+  const selectedAgent = selectedAgentId ? getAgent(selectedAgentId) : undefined;
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 p-4 lg:p-8 flex flex-col gap-6 font-sans">
@@ -70,12 +88,31 @@ function App() {
             <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Happy
             <span className="w-2 h-2 rounded-full bg-red-500 ml-2"></span> Unhappy
           </div>
-          <NetworkGraph agents={agents} recentPosts={posts.slice(-10)} />
+          <NetworkGraph
+            agents={agents}
+            recentPosts={posts.slice(-10)}
+            selectedAgentId={selectedAgentId}
+            onNodeClick={handleNodeClick}
+          />
         </div>
 
-        {/* Live Feed */}
+        {/* Live Feed / Agent Detail */}
         <div className="lg:col-span-2 flex flex-col gap-6 overflow-hidden">
-          <LiveFeed posts={posts} />
+          {selectedAgentId && selectedAgent ? (
+            <AgentDetailPanel
+              agentId={selectedAgentId}
+              agent={selectedAgent}
+              posts={posts}
+              getAgentFeed={getAgentFeed}
+              getAgentPosts={getAgentPosts}
+              setAgentHappiness={setAgentHappiness}
+              injectPost={injectPost}
+              onClose={handleCloseAgentDetail}
+              isRunning={isRunning}
+            />
+          ) : (
+            <LiveFeed posts={posts} />
+          )}
         </div>
 
         {/* Sidebar Controls */}

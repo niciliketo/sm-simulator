@@ -55,7 +55,18 @@ const veryPositiveContent = [
   "I love this! Everything is going so well!",
 ];
 
-export function generateContent(sentiment: number): string {
+// Simple hash function to convert string to number for seeding
+function simpleHash(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  return Math.abs(hash);
+}
+
+export function generateContent(sentiment: number, postId: string): string {
   let pool: string[];
 
   if (sentiment < 0.2) {
@@ -70,9 +81,9 @@ export function generateContent(sentiment: number): string {
     pool = veryPositiveContent;
   }
 
-  // Use post ID or timestamp as seed for consistent generation
-  // For now, just pick randomly
-  return pool[Math.floor(Math.random() * pool.length)];
+  // Use post ID as seed for consistent generation
+  const index = simpleHash(postId) % pool.length;
+  return pool[index];
 }
 
 // Generate a person name based on ID
