@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { Post } from '../engine/types';
 import { MessageSquare } from 'lucide-react';
 import { generateContent, generatePersonName } from '../utils/contentGenerator';
@@ -10,6 +10,34 @@ interface LiveFeedProps {
 export const LiveFeed: React.FC<LiveFeedProps> = ({ posts }) => {
   // Show most recent posts first
   const recentPosts = [...posts].reverse().slice(0, 20);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const prevPostIdsRef = useRef<Set<string>>(new Set());
+  const [newPostIds, setNewPostIds] = useState<Set<string>>(new Set());
+
+  // Track new posts and animate them in
+  useEffect(() => {
+    const currentPostIds = new Set(recentPosts.map(p => p.id));
+    const newIds = new Set<string>();
+
+    recentPosts.forEach(post => {
+      if (!prevPostIdsRef.current.has(post.id)) {
+        newIds.add(post.id);
+      }
+    });
+
+    if (newIds.size > 0) {
+      setNewPostIds(newIds);
+
+      // Remove the "new" status after animation completes
+      const timer = setTimeout(() => {
+        setNewPostIds(new Set());
+      }, 300);
+
+      return () => clearTimeout(timer);
+    }
+
+    prevPostIdsRef.current = currentPostIds;
+  }, [recentPosts]);
 
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg flex-1 flex flex-col overflow-hidden">
@@ -17,17 +45,26 @@ export const LiveFeed: React.FC<LiveFeedProps> = ({ posts }) => {
         <MessageSquare size={16} /> Live Feed
       </div>
 
-      <div className="flex-1 overflow-y-auto space-y-3 pr-2">
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto space-y-3 pr-2"
+        style={{ scrollBehavior: 'smooth' }}
+      >
         {recentPosts.length === 0 ? (
           <div className="text-slate-500 text-sm text-center py-8">
             No posts yet. Start the simulation to see activity.
           </div>
         ) : (
-          recentPosts.map((post) => (
-            <div
-              key={post.id}
-              className="bg-slate-800/50 border border-slate-700 rounded-lg p-3 space-y-2 hover:bg-slate-800 transition-colors"
-            >
+          recentPosts.map((post) => {
+            const isNew = newPostIds.has(post.id);
+            return (
+              <div
+                key={post.id}
+                className={`bg-slate-800/50 border border-slate-700 rounded-lg p-3 space-y-2 hover:bg-slate-800 transition-colors ${
+                  isNew ? 'animate-grow-in' : ''
+                }`}
+                style={isNew ? { animation: 'grow-in 300ms ease-out' } : undefined}
+              >
               <div className="flex items-center justify-between">
                 <span className="text-sm font-semibold text-slate-300">
                   {generatePersonName(post.authorId)}
@@ -58,9 +95,24 @@ export const LiveFeed: React.FC<LiveFeedProps> = ({ posts }) => {
                 </div>
               </div>
             </div>
-          ))
+            );
+          })
         )}
       </div>
+      <style>{`
+        @keyframes grow-in {
+          from {
+            max-height: 1px;
+            opacity: 0.3;
+            overflow: hidden;
+          }
+          to {s
+            max-height: 500px;
+            opacity: 1;
+            overflow: visible;
+          }
+        }
+      `}</style>
     </div>
   );
 };

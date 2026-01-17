@@ -215,38 +215,49 @@ const StatCard = ({ icon, label, value, subLabel, color }: any) => (
 );
 
 const PostList = ({ posts, emptyMessage }: { posts: Post[]; emptyMessage: string }) => {
-  const [prevPostIds, setPrevPostIds] = React.useState<Set<string>>(new Set());
+  const [newPostIds, setNewPostIds] = React.useState<Set<string>>(new Set());
+  const prevPostIdsRef = React.useRef<Set<string>>(new Set());
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    const currentIds = new Set(posts.map(p => p.id));
-    const hasNewPosts = posts.some(p => !prevPostIds.has(p.id));
+    const currentPostIds = new Set(posts.map(p => p.id));
+    const newIds = new Set<string>();
 
-    if (hasNewPosts && scrollRef.current) {
-      // Smooth scroll to top when new posts arrive
-      scrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    posts.forEach(post => {
+      if (!prevPostIdsRef.current.has(post.id)) {
+        newIds.add(post.id);
+      }
+    });
+
+    if (newIds.size > 0) {
+      setNewPostIds(newIds);
+
+      // Remove the "new" status after animation completes
+      const timer = setTimeout(() => {
+        setNewPostIds(new Set());
+      }, 300);
+
+      prevPostIdsRef.current = currentPostIds;
+      return () => clearTimeout(timer);
     }
 
-    setPrevPostIds(currentIds);
+    prevPostIdsRef.current = currentPostIds;
   }, [posts]);
 
-  const isNewPost = (postId: string) => !prevPostIds.has(postId);
-
   return (
-    <div ref={scrollRef} className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
-      {posts.length === 0 ? (
-        <div className="text-slate-500 text-sm text-center py-8">{emptyMessage}</div>
-      ) : (
-        posts.map((post, index) => (
-          <div
-            key={post.id}
-            className={`bg-slate-800/50 border border-slate-700 rounded-lg p-3 space-y-2 hover:bg-slate-800 transition-all ${
-              isNewPost(post.id) && index < 3 ? 'animate-slideIn' : ''
-            }`}
-            style={{
-              animationDelay: isNewPost(post.id) ? `${index * 50}ms` : '0ms'
-            }}
-          >
+    <>
+      <div ref={scrollRef} className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
+        {posts.length === 0 ? (
+          <div className="text-slate-500 text-sm text-center py-8">{emptyMessage}</div>
+        ) : (
+          posts.map((post) => {
+            const isNew = newPostIds.has(post.id);
+            return (
+              <div
+                key={post.id}
+                className="bg-slate-800/50 border border-slate-700 rounded-lg p-3 space-y-2 hover:bg-slate-800 transition-colors"
+                style={isNew ? { animation: 'grow-in 300ms ease-out' } : undefined}
+              >
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold text-slate-300">
                 {generatePersonName(post.authorId)}
@@ -276,10 +287,26 @@ const PostList = ({ posts, emptyMessage }: { posts: Post[]; emptyMessage: string
                 {getSentimentLabel(post.sentiment)}
               </div>
             </div>
-          </div>
-        ))
-      )}
-    </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+      <style>{`
+        @keyframes grow-in {
+          from {
+            max-height: 1px;
+            opacity: 0.3;
+            overflow: hidden;
+          }
+          to {
+            max-height: 500px;
+            opacity: 1;
+            overflow: visible;
+          }
+        }
+      `}</style>
+    </>
   );
 };
 
